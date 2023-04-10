@@ -41,12 +41,27 @@ function getRandomAdvice(){
     return advice_array[idx]
 }
 
+function getRandomAdviceFromAPI(){
+    fetch('https://api.adviceslip.com/advice').then(res => res.json())
+        .then(json => {
+            
+            let adviceID = json["slip"].id
+            let adviceText = json["slip"].advice
+
+            let adviceIDTextOutput = document.querySelector('#advice-id-text')
+            let adviceTextOutput = document.querySelector('.advice-text')
+            adviceTextOutput.textContent = adviceText
+            adviceIDTextOutput.textContent = adviceID;
+        })
+        .catch(error => console.log(`Error: ${error}`))
+}
+
 let buttonNext = document.querySelector("#button-next-advice")
 
 buttonNext.onclick = () => {
     let adviceIDText = document.querySelector('#advice-id-text')
     let adviceText = document.querySelector('.advice-text')
-    let adviceObj = getRandomAdvice()
+    let adviceObj = getRandomAdviceFromAPI()
     adviceText.textContent = adviceObj.text;
     adviceIDText.textContent = adviceObj.id;
 }
